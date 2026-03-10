@@ -1,0 +1,190 @@
+---
+layout: default
+title: Portfolio
+---
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero__text">
+    <p class="hero__eyebrow fade-up fade-up--1">GIS Specialist &amp; Spatial Data Scientist</p>
+    <h1 class="hero__title fade-up fade-up--2">
+      Mapping<br>the <em>World</em><br>in Data.
+    </h1>
+    <p class="hero__desc fade-up fade-up--3">
+      I turn complex spatial data into clear, compelling maps and analyses — from satellite imagery
+      to interactive web applications and publication-ready cartography.
+    </p>
+    <div class="hero__tags fade-up fade-up--4">
+      <span class="tag tag--active">Web Mapping</span>
+      <span class="tag">Remote Sensing</span>
+      <span class="tag">Spatial Analysis</span>
+      <span class="tag">Cartography</span>
+    </div>
+  </div>
+  <div class="hero__visual">
+    <div class="hero__map-bg"></div>
+    <div class="hero__map-contours"></div>
+    <div class="hero__coords">
+      45°31′N 122°40′W<br>
+      Elev. 50m<br>
+      WGS 84
+    </div>
+    <div class="hero__map-label">Spatial Thinking · Data Driven</div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="about__number">GIS</div>
+  <div class="about__content">
+    <p class="about__bio">
+      I'm a GIS professional with expertise spanning interactive web mapping, satellite image analysis,
+      geostatistics, and bespoke cartographic design. I've worked with federal agencies, NGOs, and
+      private-sector clients to bring clarity to spatial problems — from urban planning to environmental
+      monitoring to logistics optimization.
+    </p>
+    <div class="about__skills">
+      <span class="skill-chip">ArcGIS Pro</span>
+      <span class="skill-chip">QGIS</span>
+      <span class="skill-chip">Mapbox GL JS</span>
+      <span class="skill-chip">Leaflet</span>
+      <span class="skill-chip">PostGIS</span>
+      <span class="skill-chip">Python (GeoPandas)</span>
+      <span class="skill-chip">R (sf / terra)</span>
+      <span class="skill-chip">Google Earth Engine</span>
+      <span class="skill-chip">ENVI / ERDAS</span>
+      <span class="skill-chip">D3.js</span>
+      <span class="skill-chip">SQL</span>
+      <span class="skill-chip">Illustrator / Affinity</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section class="projects" id="projects">
+  <div class="section-header">
+    <span class="section-header__label">Selected Work</span>
+    <div class="section-header__rule"></div>
+    <span class="section-header__label">{{ site.projects | size }} Projects</span>
+  </div>
+
+  <div class="projects__grid">
+    {% assign sorted_projects = site.projects | sort: 'order' %}
+    {% for project in sorted_projects %}
+    <article class="project-card">
+      <div class="project-card__thumb">
+        <div class="project-card__thumb-inner thumb--{{ project.thumb_class }}">
+          <div class="thumb-grid-overlay"></div>
+        </div>
+      </div>
+      <div class="project-card__body">
+        <p class="project-card__cat">{{ project.category }}</p>
+        <h2 class="project-card__title">{{ project.title }}</h2>
+        <p class="project-card__desc">{{ project.summary }}</p>
+        <div class="project-card__footer">
+          <div class="project-card__tools">
+            {% for tool in project.tools limit:3 %}
+              <span class="tool-badge">{{ tool }}</span>
+            {% endfor %}
+          </div>
+          <a href="{{ project.url | relative_url }}" class="project-card__link">
+            View →
+          </a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section class="skills-section" id="skills">
+  <div class="section-header">
+    <span class="section-header__label">Capabilities</span>
+    <div class="section-header__rule"></div>
+    <span class="section-header__label">Technical Skills</span>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-block">
+      <span class="skill-block__icon">🗺️</span>
+      <h3 class="skill-block__title">Web Mapping</h3>
+      <ul class="skill-block__list">
+        <li>Mapbox GL JS / Leaflet</li>
+        <li>ArcGIS Online / Experience Builder</li>
+        <li>Deck.gl / Kepler.gl</li>
+        <li>GeoServer / MapServer</li>
+      </ul>
+      <div class="skill-bar-wrap">
+        <div>
+          <p class="skill-bar__label"><span>Proficiency</span><span>95%</span></p>
+          <div class="skill-bar"><div class="skill-bar__fill" data-width="95" style="width:95%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-block">
+      <span class="skill-block__icon">🛰️</span>
+      <h3 class="skill-block__title">Remote Sensing</h3>
+      <ul class="skill-block__list">
+        <li>Google Earth Engine</li>
+        <li>ENVI / ERDAS Imagine</li>
+        <li>Sentinel / Landsat / MODIS</li>
+        <li>Change Detection & Classification</li>
+      </ul>
+      <div class="skill-bar-wrap">
+        <div>
+          <p class="skill-bar__label"><span>Proficiency</span><span>88%</span></p>
+          <div class="skill-bar"><div class="skill-bar__fill" data-width="88" style="width:88%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-block">
+      <span class="skill-block__icon">📊</span>
+      <h3 class="skill-block__title">Spatial Analysis</h3>
+      <ul class="skill-block__list">
+        <li>Python: GeoPandas, Shapely, Rasterio</li>
+        <li>R: sf, terra, tidyverse</li>
+        <li>PostGIS / Spatial SQL</li>
+        <li>Geostatistics & Kriging</li>
+      </ul>
+      <div class="skill-bar-wrap">
+        <div>
+          <p class="skill-bar__label"><span>Proficiency</span><span>92%</span></p>
+          <div class="skill-bar"><div class="skill-bar__fill" data-width="92" style="width:92%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-block">
+      <span class="skill-block__icon">🖋️</span>
+      <h3 class="skill-block__title">Cartography</h3>
+      <ul class="skill-block__list">
+        <li>ArcGIS Pro / QGIS Print Composer</li>
+        <li>Adobe Illustrator / Affinity</li>
+        <li>D3.js Custom Projections</li>
+        <li>Typographic & Thematic Design</li>
+      </ul>
+      <div class="skill-bar-wrap">
+        <div>
+          <p class="skill-bar__label"><span>Proficiency</span><span>90%</span></p>
+          <div class="skill-bar"><div class="skill-bar__fill" data-width="90" style="width:90%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact" id="contact">
+  <div>
+    <h2 class="contact__title">Let's Work<br>Together.</h2>
+    <p class="contact__sub">Open to freelance, contract, and full-time opportunities.</p>
+  </div>
+  <div class="contact__links">
+    <a href="mailto:{{ site.email }}" class="contact__link">✉ {{ site.email }}</a>
+    <a href="https://github.com/{{ site.github }}" target="_blank" class="contact__link">↗ GitHub</a>
+    <a href="https://linkedin.com/in/{{ site.linkedin }}" target="_blank" class="contact__link">↗ LinkedIn</a>
+  </div>
+</section>

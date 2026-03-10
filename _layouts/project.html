@@ -1,0 +1,72 @@
+---
+layout: default
+---
+
+<article>
+
+  <section class="project-hero">
+    <div class="project-hero__meta fade-up fade-up--1">
+      <a href="{{ '/' | relative_url }}#projects" class="project-hero__back">← Back to Projects</a>
+      <p class="project-hero__cat">{{ page.category }}</p>
+      <h1 class="project-hero__title">{{ page.title }}</h1>
+      <div class="project-hero__tools">
+        {% for tool in page.tools %}
+          <span class="tool-badge">{{ tool }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="project-hero__visual thumb--{{ page.thumb_class }}">
+      <div class="thumb-grid-overlay"></div>
+    </div>
+  </section>
+
+  <div class="project-body">
+    <div class="project-body__content">
+      {{ content }}
+    </div>
+    <aside class="project-body__sidebar">
+
+      <div class="sidebar-block">
+        <p class="sidebar-block__label">Year</p>
+        <p class="sidebar-block__value">{{ page.year }}</p>
+      </div>
+
+      <div class="sidebar-block">
+        <p class="sidebar-block__label">Category</p>
+        <p class="sidebar-block__value">{{ page.category }}</p>
+      </div>
+
+      {% if page.role %}
+      <div class="sidebar-block">
+        <p class="sidebar-block__label">Role</p>
+        <p class="sidebar-block__value">{{ page.role }}</p>
+      </div>
+      {% endif %}
+
+      {% if page.dataset %}
+      <div class="sidebar-block">
+        <p class="sidebar-block__label">Data Source</p>
+        <p class="sidebar-block__value">{{ page.dataset }}</p>
+      </div>
+      {% endif %}
+
+      {% if page.github_url %}
+      <div class="sidebar-block">
+        <a href="{{ page.github_url }}" target="_blank" class="contact__link" style="display:inline-flex; background: var(--ink); color: var(--paper); font-size:0.65rem; padding: 0.6rem 1rem;">
+          ↗ View on GitHub
+        </a>
+      </div>
+      {% endif %}
+
+      {% if page.live_url %}
+      <div class="sidebar-block">
+        <a href="{{ page.live_url }}" target="_blank" class="contact__link" style="display:inline-flex; background: var(--accent); color: var(--paper); border-color: var(--accent); font-size:0.65rem; padding: 0.6rem 1rem;">
+          ↗ Live Demo
+        </a>
+      </div>
+      {% endif %}
+
+    </aside>
+  </div>
+
+</article>

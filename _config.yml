@@ -1,0 +1,34 @@
+title: "GIS Portfolio"
+description: "Spatial Analysis · Web Mapping · Remote Sensing · Cartography"
+author: "Your Name"
+email: "your@email.com"
+github: "yourgithub"
+linkedin: "yourlinkedin"
+baseurl: ""
+url: "https://yourgithub.github.io"
+
+# Build settings
+markdown: kramdown
+theme: null
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - README.md
