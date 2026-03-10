@@ -1,11 +1,11 @@
 title: "GIS Portfolio"
 description: "Spatial Analysis · Web Mapping · Remote Sensing · Cartography"
-author: "Your Name"
-email: "your@email.com"
-github: "yourgithub"
-linkedin: "yourlinkedin"
+author: "Matthew Price"
+email: "M.r.Price650@gmail.com"
+github: "MPrice650"
+linkedin: "linkedin.com/in/matthew-price-83035291"
 baseurl: ""
-url: "https://yourgithub.github.io"
+url: "https://MPrice650.github.io"
 
 # Build settings
 markdown: kramdown
