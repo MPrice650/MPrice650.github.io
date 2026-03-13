@@ -15,7 +15,7 @@ layout: default
         {% endfor %}
       </div>
     </div>
-    <div class="project-hero__visual thumb--{{ page.thumb_class }}">
+    <div class="project-hero__visual thumb--{{ page.thumb_class }}" {% if page.thumb_image %}style="background-image: url('{{ page.thumb_image }}'); background-size: cover; background-position: center;"{% endif %}>
       <div class="thumb-grid-overlay"></div>
     </div>
   </section>
