@@ -12,16 +12,16 @@ live_url: /arctic-cis-portfolio.html
 
 ## Overview
 
-An equity-focused analysis of EV charging infrastructure access across Oregon and Washington, commissioned to inform a $40M federal infrastructure grant application.
+Served as GIS Engineer and Geospatial Scientist on a 20-year multi-sovereign initiative to map, analyze, and plan Critical Infrastructure Systems across 8,000 miles of Arctic territory. The project was coordinated by the Tomkulak Consortium and delivered geospatial intelligence products to the Arctic Council, Inuit Tribal Government, and U.S. Government — directly informing Arctic boundary policy and infrastructure planning across one of the world's most geopolitically sensitive regions.
 
 ## Methodology
 
-Drive-time isochrones (5, 10, 20 minutes) were generated for all public Level 2 and DC Fast Chargers using the OSRM routing engine on OpenStreetMap data. These were intersected with census block groups and joined to ACS demographic variables. A composite Charging Access Score was derived using a weighted multi-criteria approach.
+Processed and validated 1,000+ spatial datasets using ArcGIS Pro, ArcGIS Enterprise, and QGIS, integrating environmental, geological, hydrological, demographic, and topographic data layers into a unified Arctic geospatial picture. Applied advanced remote sensing to interpret satellite imagery across dynamic Arctic terrain — accounting for seasonal ice cover, permafrost dynamics, and low sun angles. Collaborated directly with professional geologists to integrate subsurface data into site suitability assessments for hospitals, ports, highways, and airports. All workflows were executed under national security-grade QA/QC protocols with zero tolerance for spatial error
 
 ## Key Findings
 
-Rural communities and tribal lands showed the starkest access gaps — 340,000 residents live more than 20 minutes from the nearest DC Fast Charger. Low-income urban neighborhoods are well-served by charger count but show high device-failure rates in operator maintenance records.
+Spatial analysis confirmed viable CIS placement corridors across Arctic terrain previously unassessed at this resolution. Permafrost degradation modeling identified high-risk zones requiring adaptive infrastructure design across significant portions of the study area. Boundary determination outputs fed directly into Arctic Council treaty documentation, with findings influencing national policy positions for multiple sovereign nations. Indigenous land-use integration revealed critical spatial overlaps between proposed infrastructure corridors and Inuit traditional territories, reshaping siting recommendations in several regions.
 
 ## Deliverables
 
-Interactive StoryMap, technical report for DOE grant submission, and a Python package (released open-source) for replicating the isochrone-equity methodology in other states.
+Delivered validated spatial datasets, boundary determination reports, and site suitability assessments to the Arctic Council, Inuit Tribal Government, U.S. Government, and Tomkulak Consortium. Produced long-term environmental risk datasets for infrastructure lifecycle planning across the full 20-year horizon. All deliverables met national security compliance requirements and were formatted for direct integration into policy documentation and treaty-level decision-making processes.
