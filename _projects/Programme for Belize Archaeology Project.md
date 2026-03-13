@@ -25,3 +25,9 @@ Complete 3D rendered reconstructions of Mayan settlement features, including wat
 DEM and georeferenced model files compatible with ArcMap/ArcScene
 Lithic analysis records of chert and obsidian assemblages
 A certified, replicable field-to-lab workflow spanning excavation, survey, remote sensing, and artifact documentation
+
+
+<video autoplay muted loop playsinline 
+  style="width:100%; border: 2px solid var(--ink); margin: 2rem 0;">
+  <source src="/mayan-render.mp4" type="video/mp4">
+</video>
