@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arctic CIS Mapping Initiative — Matthew Price | GIS Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080c10;
+    --dark: #0d1520;
+    --panel: #111c2a;
+    --border: rgba(180,210,240,0.1);
+    --border-bright: rgba(180,210,240,0.25);
+    --ice: #c8e0f4;
+    --ice-dim: rgba(200,224,244,0.5);
+    --frost: #e8f4ff;
+    --red: #e05a3a;
+    --red-dim: rgba(224,90,58,0.15);
+    --gold: #d4a843;
+    --gold-dim: rgba(212,168,67,0.12);
+    --text: #a8c4dc;
+    --text-bright: #d8eaf8;
+    --muted: #4a6a84;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Spectral', serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* === STAR FIELD === */
+  .starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 4s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--min-op, 0.1); }
+    50% { opacity: var(--max-op, 0.6); }
+  }
+
+  /* === AURORA === */
+  .aurora {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 40vh;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .aurora-band {
+    position: absolute;
+    left: -20%;
+    right: -20%;
+    height: 120px;
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: drift var(--dur, 12s) ease-in-out infinite alternate;
+    opacity: 0.12;
+  }
+  .aurora-band:nth-child(1) {
+    top: 30px;
+    background: linear-gradient(90deg, transparent, #00e5cc, #0088ff, transparent);
+    --dur: 14s;
+    animation-delay: 0s;
+  }
+  .aurora-band:nth-child(2) {
+    top: 80px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00ccff, transparent);
+    --dur: 18s;
+    animation-delay: -5s;
+    opacity: 0.08;
+  }
+  .aurora-band:nth-child(3) {
+    top: 50px;
+    background: linear-gradient(90deg, transparent, #8800ff, #00aaff, transparent);
+    --dur: 22s;
+    animation-delay: -9s;
+    opacity: 0.06;
+  }
+  @keyframes drift {
+    from { transform: translateX(-5%) scaleY(0.8); }
+    to { transform: translateX(5%) scaleY(1.2); }
+  }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4.5rem;
+    background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-id {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .nav-id span { color: var(--ice); }
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+  }
+  .nav-links a {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ice); }
+
+  /* === CLASSIFIED BANNER === */
+  .classified-banner {
+    position: relative;
+    z-index: 1;
+    margin-top: 64px;
+    background: var(--red-dim);
+    border-bottom: 1px solid rgba(224,90,58,0.3);
+    padding: 0.55rem 4.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .classified-text {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .classified-dot {
+    width: 5px; height: 5px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* === HERO === */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 7rem 4.5rem 5rem;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-meta-row {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: slideIn 0.8s ease forwards 0.2s;
+  }
+  .meta-block {}
+  .meta-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .meta-value {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ice);
+    letter-spacing: 0.08em;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    line-height: 0.92;
+    color: var(--frost);
+    letter-spacing: -0.02em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: slideIn 0.8s ease forwards 0.4s;
+  }
+  .hero-title .stroke-text {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(200,224,244,0.35);
+  }
+  .hero-title .accent {
+    color: var(--gold);
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    opacity: 0;
+    animation: slideIn 0.8s ease forwards 0.6s;
+  }
+  .hero-summary {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-bright);
+    font-style: italic;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-content: start;
+  }
+  .hero-stat {
+    border: 1px solid var(--border);
+    padding: 1.2rem 1.5rem;
+    background: rgba(17,28,42,0.6);
+  }
+  .hero-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--ice);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .hero-stat-num.gold { color: var(--gold); }
+  .hero-stat-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === ARCTIC MAP SVG SECTION === */
+  .map-section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 4.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .map-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .map-frame {
+    border: 1px solid var(--border);
+    background: var(--dark);
+    padding: 2rem;
+    position: relative;
+  }
+  .map-frame-corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--ice-dim);
+    border-style: solid;
+  }
+  .map-frame-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .map-frame-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+  .map-frame-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+  .map-frame-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+  .arctic-svg { width: 100%; height: 380px; }
+
+  /* === SECTIONS === */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 4.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sec-eyebrow {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .sec-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    color: var(--frost);
+    margin-bottom: 3rem;
+    line-height: 1.1;
+  }
+
+  /* === SCOPE GRID === */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .scope-body {
+    font-size: 0.97rem;
+    line-height: 1.9;
+    color: var(--text-bright);
+  }
+  .scope-body p + p { margin-top: 1.2rem; }
+
+  .scope-sidebar {}
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-row:first-child { border-top: 1px solid var(--border); }
+  .data-key {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .data-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--ice);
+    text-align: right;
+    max-width: 200px;
+  }
+
+  /* === DELIVERABLES === */
+  .deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .deliverable-card {
+    background: var(--dark);
+    padding: 2.5rem 2rem;
+    transition: background 0.25s;
+    cursor: default;
+  }
+  .deliverable-card:hover { background: var(--panel); }
+  .del-icon {
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+  .del-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--frost);
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+  .del-desc {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* === STAKEHOLDERS === */
+  .stakeholder-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .stakeholder-row {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr 2fr auto;
+    gap: 2rem;
+    align-items: center;
+    background: var(--dark);
+    padding: 1.5rem 2rem;
+    transition: background 0.2s;
+  }
+  .stakeholder-row:hover { background: var(--panel); }
+  .s-num {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+  .s-org {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--frost);
+  }
+  .s-role {
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .s-badge {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .badge-intl { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(212,168,67,0.25); }
+  .badge-fed { background: rgba(58,107,138,0.15); color: var(--water, #5b9ab8); border: 1px solid rgba(91,154,184,0.25); }
+  .badge-indigenous { background: rgba(0,200,140,0.08); color: #00c88c; border: 1px solid rgba(0,200,140,0.2); }
+  .badge-water { background: rgba(58,107,138,0.15); color: #7bc4e0; border: 1px solid rgba(91,154,184,0.2); }
+
+  /* === TECHNICAL WORK === */
+  .tech-timeline {
+    position: relative;
+    padding-left: 2rem;
+    border-left: 1px solid var(--border);
+  }
+  .tech-entry {
+    position: relative;
+    padding: 2rem 0 2rem 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .tech-entry:last-child { border-bottom: none; }
+  .tech-entry::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: 2.4rem;
+    width: 7px; height: 7px;
+    background: var(--ice-dim);
+    border-radius: 50%;
+    border: 1px solid var(--ice);
+  }
+  .tech-entry-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .tech-entry-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--frost);
+    margin-bottom: 0.6rem;
+  }
+  .tech-entry-body {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  /* === SKILLS USED === */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .skill-chip {
+    border: 1px solid var(--border);
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: border-color 0.2s;
+  }
+  .skill-chip:hover { border-color: var(--border-bright); }
+  .skill-chip-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--frost);
+  }
+  .skill-chip-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* === IMPACT BANNER === */
+  .impact-banner {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 4.5rem;
+    background: linear-gradient(135deg, #0a1822 0%, #0d2030 50%, #0a1420 100%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .impact-banner::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,224,244,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .impact-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .impact-left .big-stat {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(4rem, 9vw, 8rem);
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(200,224,244,0.4);
+    line-height: 0.9;
+    margin-bottom: 0.5rem;
+  }
+  .impact-left .big-stat-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--ice-dim);
+    text-transform: uppercase;
+  }
+  .impact-right {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--text-bright);
+    font-style: italic;
+    border-left: 2px solid var(--gold);
+    padding-left: 2.5rem;
+  }
+
+  /* === CTA === */
+  .cta {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 4.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+  }
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--frost);
+    margin-bottom: 0.5rem;
+  }
+  .cta-sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-family: 'Syne Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+  .cta-buttons { display: flex; gap: 1rem; flex-shrink: 0; }
+  .btn {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.2rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-ice {
+    background: var(--ice);
+    color: var(--void);
+    font-weight: 500;
+  }
+  .btn-ice:hover { background: var(--frost); }
+  .btn-ghost {
+    border: 1px solid var(--border-bright);
+    color: var(--ice);
+  }
+  .btn-ghost:hover { background: rgba(200,224,244,0.06); }
+
+  /* === FOOTER === */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 4.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* === SCROLLBAR === */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div class="starfield" id="starfield"></div>
+
+<!-- Aurora -->
+<div class="aurora">
+  <div class="aurora-band"></div>
+  <div class="aurora-band"></div>
+  <div class="aurora-band"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-id"><span>Matthew Price</span> / GIS Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#scope">Scope</a></li>
+    <li><a href="#vision">Vision</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#stakeholders">Stakeholders</a></li>
+    <li><a href="#technical">Technical</a></li>
+    <li><a href="https://linkedin.com/in/matthew-price-83035291" target="_blank">LinkedIn ↗</a></li>
+  </ul>
+</nav>
+
+<!-- Classified Banner -->
+<div class="classified-banner">
+  <div class="classified-dot"></div>
+  <div class="classified-text">Non-Profit Initiative · National Security Application · Arctic Council Stakeholder Project · 20-Year Planning Horizon</div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-meta-row">
+    <div class="meta-block">
+      <div class="meta-label">Organization</div>
+      <div class="meta-value">Tomkulak Consortium</div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-label">Role</div>
+      <div class="meta-value">GIS Manager</div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-label">Duration</div>
+      <div class="meta-value">Aug 2024 – May 2025</div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-label">Project Horizon</div>
+      <div class="meta-value">20-Year Initiative</div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-label">Territory</div>
+      <div class="meta-value">8,000+ miles · Arctic</div>
+    </div>
+  </div>
+
+  <h1 class="hero-title">
+    Arctic<br>
+    <span class="stroke-text">Nations</span><br>
+    <span class="accent">CIS</span> Mapping
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-summary">
+      A national-scale geospatial science initiative spanning over 8,000 miles of Arctic territory — delivering high-accuracy boundary analysis and Critical Infrastructure Systems mapping in direct support of national policy, treaty objectives, and multi-generational infrastructure planning.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">8K+</div>
+        <div class="hero-stat-label">Miles of Arctic territory mapped</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num gold">1,000+</div>
+        <div class="hero-stat-label">Spatial datasets processed & validated</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">5–8</div>
+        <div class="hero-stat-label">GIS analysts led</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num gold">3</div>
+        <div class="hero-stat-label">Sovereign stakeholder bodies</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Arctic Map Visual -->
+<div class="map-section">
+  <div class="map-label">// geospatial coverage area — arctic boundary analysis region</div>
+  <div class="map-frame">
+    <div class="map-frame-corner tl"></div>
+    <div class="map-frame-corner tr"></div>
+    <div class="map-frame-corner bl"></div>
+    <div class="map-frame-corner br"></div>
+    <svg class="arctic-svg" viewBox="0 0 1100 380" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="arcticGrad" cx="50%" cy="30%" r="60%">
+          <stop offset="0%" stop-color="rgba(200,224,244,0.08)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Background glow -->
+      <ellipse cx="550" cy="120" rx="400" ry="200" fill="url(#arcticGrad)"/>
+
+      <!-- Latitude lines -->
+      <ellipse cx="550" cy="190" rx="520" ry="130" fill="none" stroke="rgba(200,224,244,0.06)" stroke-width="1"/>
+      <ellipse cx="550" cy="190" rx="420" ry="100" fill="none" stroke="rgba(200,224,244,0.07)" stroke-width="1"/>
+      <ellipse cx="550" cy="190" rx="320" ry="70" fill="none" stroke="rgba(200,224,244,0.08)" stroke-width="1"/>
+      <ellipse cx="550" cy="190" rx="220" ry="45" fill="none" stroke="rgba(200,224,244,0.1)" stroke-width="1"/>
+      <ellipse cx="550" cy="190" rx="120" ry="22" fill="none" stroke="rgba(200,224,244,0.12)" stroke-width="1"/>
+
+      <!-- Longitude lines -->
+      <line x1="550" y1="60" x2="550" y2="320" stroke="rgba(200,224,244,0.05)" stroke-width="1"/>
+      <line x1="30" y1="190" x2="1070" y2="190" stroke="rgba(200,224,244,0.05)" stroke-width="1"/>
+      <line x1="160" y1="80" x2="940" y2="300" stroke="rgba(200,224,244,0.04)" stroke-width="1"/>
+      <line x1="940" y1="80" x2="160" y2="300" stroke="rgba(200,224,244,0.04)" stroke-width="1"/>
+
+      <!-- Arctic circle highlight -->
+      <ellipse cx="550" cy="190" rx="360" ry="88" fill="rgba(200,224,244,0.02)" stroke="rgba(200,224,244,0.18)" stroke-width="1" stroke-dasharray="6,4"/>
+      <text x="915" y="186" font-family="Syne Mono" font-size="9" fill="rgba(200,224,244,0.4)" letter-spacing="2">ARCTIC CIRCLE</text>
+
+      <!-- Coverage path — 8000 mile boundary route -->
+      <path d="M 120,220 C 160,180 200,155 260,145 C 320,135 360,130 410,125 C 460,120 490,118 540,118 C 590,118 630,120 680,125 C 730,130 770,138 820,148 C 870,158 910,170 960,185 C 990,193 1010,200 1030,210"
+            fill="none" stroke="rgba(212,168,67,0.7)" stroke-width="1.5" stroke-dasharray="8,4"/>
+      <!-- Return path -->
+      <path d="M 1030,210 C 1000,230 960,245 900,252 C 840,259 780,255 720,248 C 660,241 600,230 540,228 C 480,226 420,230 360,238 C 300,246 250,255 200,258 C 170,260 145,258 120,252 C 110,248 108,238 120,220"
+            fill="rgba(212,168,67,0.04)" stroke="rgba(212,168,67,0.5)" stroke-width="1" stroke-dasharray="8,4"/>
+
+      <!-- CIS Infrastructure nodes -->
+      <!-- Hospitals -->
+      <circle cx="210" cy="215" r="5" fill="none" stroke="#e05a3a" stroke-width="1.5"/>
+      <circle cx="210" cy="215" r="2" fill="#e05a3a" opacity="0.8"/>
+      <circle cx="380" cy="178" r="5" fill="none" stroke="#e05a3a" stroke-width="1.5"/>
+      <circle cx="380" cy="178" r="2" fill="#e05a3a" opacity="0.8"/>
+      <circle cx="600" cy="162" r="5" fill="none" stroke="#e05a3a" stroke-width="1.5"/>
+      <circle cx="600" cy="162" r="2" fill="#e05a3a" opacity="0.8"/>
+      <circle cx="820" cy="178" r="5" fill="none" stroke="#e05a3a" stroke-width="1.5"/>
+      <circle cx="820" cy="178" r="2" fill="#e05a3a" opacity="0.8"/>
+      <circle cx="970" cy="202" r="5" fill="none" stroke="#e05a3a" stroke-width="1.5"/>
+      <circle cx="970" cy="202" r="2" fill="#e05a3a" opacity="0.8"/>
+
+      <!-- Ports -->
+      <rect x="278" y="224" width="8" height="8" fill="none" stroke="var(--water-light, #7bc4e0)" stroke-width="1.5" transform="rotate(45,282,228)"/>
+      <rect x="728" y="224" width="8" height="8" fill="none" stroke="var(--water-light, #7bc4e0)" stroke-width="1.5" transform="rotate(45,732,228)"/>
+
+      <!-- Airports -->
+      <path d="M490,220 L500,215 L510,220 L500,212 Z" fill="none" stroke="#8aad7a" stroke-width="1.5"/>
+      <path d="M670,215 L680,210 L690,215 L680,207 Z" fill="none" stroke="#8aad7a" stroke-width="1.5"/>
+
+      <!-- Boundary analysis line -->
+      <path d="M 80,340 L 80,355 L 1020,355 L 1020,340"
+            fill="none" stroke="rgba(200,224,244,0.1)" stroke-width="1"/>
+      <text x="530" y="372" font-family="Syne Mono" font-size="8" fill="rgba(200,224,244,0.25)" text-anchor="middle" letter-spacing="3">8,000+ MILES OF SURVEYED ARCTIC TERRITORY</text>
+
+      <!-- Legend -->
+      <circle cx="60" cy="50" r="4" fill="none" stroke="#e05a3a" stroke-width="1.5"/>
+      <circle cx="60" cy="50" r="1.5" fill="#e05a3a"/>
+      <text x="72" y="54" font-family="Syne Mono" font-size="8" fill="rgba(200,224,244,0.5)">Hospital / Medical</text>
+      <rect x="56" y="68" width="7" height="7" fill="none" stroke="#7bc4e0" stroke-width="1.5" transform="rotate(45,59.5,71.5)"/>
+      <text x="72" y="74" font-family="Syne Mono" font-size="8" fill="rgba(200,224,244,0.5)">Port</text>
+      <path d="M55,89 L62,85 L69,89 L62,82 Z" fill="none" stroke="#8aad7a" stroke-width="1.5"/>
+      <text x="72" y="92" font-family="Syne Mono" font-size="8" fill="rgba(200,224,244,0.5)">Airport</text>
+      <line x1="55" y1="105" x2="70" y2="105" stroke="rgba(212,168,67,0.7)" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="72" y="108" font-family="Syne Mono" font-size="8" fill="rgba(200,224,244,0.5)">Boundary survey route</text>
+    </svg>
+  </div>
+</div>
+
+<!-- Scope -->
+<section id="scope">
+  <div class="sec-eyebrow">01 — Project Scope</div>
+  <h2 class="sec-title">A 20-Year Infrastructure<br>Planning Initiative</h2>
+  <div class="scope-grid">
+    <div class="scope-body">
+      <p>The Tomkulak Consortium engaged Matthew as GIS Manager to direct the geospatial science backbone of a 20-year, non-profit Critical Infrastructure Systems initiative across Arctic Nations territory. The core mission: leverage advanced geospatial technologies to identify and map optimal locations for critical infrastructure development — facilitating sustainable growth, enhancing connectivity, and improving quality of life for remote and Indigenous communities while preserving the unique environmental and cultural heritage of the region.</p>
+      <p>The work spanned the full geospatial production lifecycle — from raw satellite imagery interpretation and spatial modeling all the way through to final cartographic output and stakeholder-ready map deliverables. Matthew led a team of 5–8 GIS analysts through this end-to-end pipeline, processing and validating over 1,000 spatial datasets against national security-grade data integrity standards.</p>
+      <p>A critical and unusual aspect of this project was its integration with geological expertise: Matthew collaborated directly with professional geologists to conduct spatial analysis informing where Critical Infrastructure Systems — hospitals, ports, highways, airports — should be placed. This meant integrating subsurface terrain data, permafrost modeling, and environmental risk factors alongside traditional boundary and cartographic work.</p>
+    </div>
+    <div class="scope-sidebar">
+      <div class="data-row">
+        <div class="data-key">Client</div>
+        <div class="data-val">Tomkulak Consortium (Non-Profit)</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Territory</div>
+        <div class="data-val">8,000+ miles Arctic</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Planning horizon</div>
+        <div class="data-val">20 years</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Team size</div>
+        <div class="data-val">5–8 GIS analysts</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Datasets validated</div>
+        <div class="data-val">1,000+</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Platforms used</div>
+        <div class="data-val">ArcGIS Pro, QGIS, Enterprise GIS</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Security standard</div>
+        <div class="data-val">National security QA/QC protocols</div>
+      </div>
+      <div class="data-row">
+        <div class="data-key">Primary output type</div>
+        <div class="data-val">Geospatial intelligence products</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Vision & Value Proposition -->
+<section id="vision" style="background: var(--panel);">
+  <div class="sec-eyebrow">01b — Vision & Value Proposition</div>
+  <h2 class="sec-title">The Strategic Framework</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border);">
+
+    <div style="background: var(--dark); padding: 2.5rem 2rem;">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; color:var(--gold); text-transform:uppercase; margin-bottom:1rem;">Smart Mapping</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.95rem; color:var(--frost); margin-bottom:0.8rem;">Exhaustive, Accurate Spatial Coverage</div>
+      <p style="font-size:0.83rem; line-height:1.75; color:var(--muted);">Employed cutting-edge geospatial tools to build comprehensive maps integrating topography, geology, hydrology, and ecological features — identifying suitable sites for infrastructure development across 8,000+ miles of Arctic terrain.</p>
+    </div>
+
+    <div style="background: var(--dark); padding: 2.5rem 2rem;">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; color:var(--gold); text-transform:uppercase; margin-bottom:1rem;">Risk Management</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.95rem; color:var(--frost); margin-bottom:0.8rem;">Long-Term Resilience & Sustainability</div>
+      <p style="font-size:0.83rem; line-height:1.75; color:var(--muted);">Geospatial analysis enabled identification and mitigation of potential risks — extreme weather events, permafrost dynamics, environmental sensitivities — integrating climate change projections to inform adaptive infrastructure strategies.</p>
+    </div>
+
+    <div style="background: var(--dark); padding: 2.5rem 2rem;">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; color:var(--gold); text-transform:uppercase; margin-bottom:1rem;">Economic Opportunity</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.95rem; color:var(--frost); margin-bottom:0.8rem;">Strategic Growth for Remote Communities</div>
+      <p style="font-size:0.83rem; line-height:1.75; color:var(--muted);">Spatial analysis identified strategic locations for critical infrastructure to support economic growth in Arctic communities — unlocking investment opportunities and job creation in some of the most underserved and geographically isolated regions in North America.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Deliverables -->
+<section id="deliverables" style="background: var(--panel);">
+  <div class="sec-eyebrow">02 — Key Deliverables</div>
+  <h2 class="sec-title">What Was Produced</h2>
+  <div class="deliverables-grid">
+    <div class="deliverable-card">
+      <span class="del-icon">🗺️</span>
+      <div class="del-title">Arctic Boundary Analysis Products</div>
+      <p class="del-desc">High-accuracy spatial boundary determinations across 8,000+ miles of Arctic territory, directly informing policy-level treaty and sovereignty decisions for Arctic Council member nations.</p>
+    </div>
+    <div class="deliverable-card">
+      <span class="del-icon">🏗️</span>
+      <div class="del-title">CIS Placement Suitability Maps</div>
+      <p class="del-desc">Site suitability and risk assessment products for Critical Infrastructure placement — hospitals, ports, highways, airports — combining subsurface terrain, permafrost, and environmental data with geological expertise.</p>
+    </div>
+    <div class="deliverable-card">
+      <span class="del-icon">📡</span>
+      <div class="del-title">Satellite Imagery Analysis</div>
+      <p class="del-desc">Applied advanced remote sensing methodologies to verify and enhance Arctic spatial datasets across geopolitically sensitive terrain, resolving ambiguities in dynamic Arctic conditions.</p>
+    </div>
+    <div class="deliverable-card">
+      <span class="del-icon">⚠️</span>
+      <div class="del-title">Lifecycle Risk Planning Datasets</div>
+      <p class="del-desc">Geospatial maintenance planning datasets identifying long-term environmental and geological risk factors for infrastructure systems post-construction — supporting 20-year lifecycle management decisions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Goals & Impacts -->
+<section id="goals">
+  <div class="sec-eyebrow">03 — Goals & Impacts</div>
+  <h2 class="sec-title">Ten Strategic Objectives</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border);">
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">01</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Infrastructure Resilience to Climate Change</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Model and predict climate change impacts on infrastructure. Prioritize location and design of critical systems to mitigate climate-related risks over the 20-year horizon.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">02</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Support Indigenous & Remote Communities</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Support the planning and development of infrastructure that meets the real needs of Indigenous and remote Arctic communities — ensuring spatial deliverables reflect community priorities and Traditional Knowledge.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">03</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Optimize Transportation & Supply Chain Networks</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Map and improve transportation corridors to enhance connectivity. Optimize the logistics of delivering goods and services to remote Arctic areas — a critical function for communities with no road access.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">04</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Support Sustainable Resource Development</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Identify and monitor critical natural resources across the Arctic territory. Facilitate responsible development that balances economic opportunity with environmental stewardship.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">05</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Advance Security & Sovereignty</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Monitor borders, track maritime activity, and support emergency response planning — producing boundary analysis products that directly feed into national security and treaty-level sovereignty determinations.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">06</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Promote Renewable Energy Infrastructure</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Map areas with potential for renewable energy development across the Arctic region — supporting the long-term transition of remote communities from fossil-fuel dependency.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">07</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Foster Data Sharing & Collaboration</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Enable real-time collaboration between Arctic Council members, Indigenous governments, and federal agencies. Support real-time monitoring of infrastructure performance and environmental change.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">08</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Improve Emergency Preparedness & Response</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Improve disaster preparedness and enhance search-and-rescue operations across remote Arctic territory — where the nearest response resources may be hundreds of miles away.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">09</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Support Tourism & Cultural Preservation</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Map areas of interest for sustainable tourism while protecting Indigenous heritage and natural Arctic landscapes — balancing economic opportunity with cultural and environmental integrity.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--dark); padding:2rem 2.5rem; display:flex; gap:1.5rem; align-items:flex-start; transition: background 0.2s;" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background='var(--dark)'">
+      <div style="font-family:'Syne Mono',monospace; font-size:0.6rem; color:var(--gold); min-width:24px; padding-top:0.15rem;">10</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.88rem; color:var(--frost); margin-bottom:0.4rem;">Facilitate Sustainable Urban Development</div>
+        <p style="font-size:0.8rem; line-height:1.7; color:var(--muted);">Plan sustainable Arctic communities that can accommodate future growth. Provide spatial intelligence to support smart city solutions tailored to the unique constraints of Arctic environments.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Stakeholders -->
+<section id="stakeholders">
+  <div class="sec-eyebrow">03 — Stakeholder Organizations</div>
+  <h2 class="sec-title">Multi-Sovereign Coordination</h2>
+  <div class="stakeholder-list">
+    <div class="stakeholder-row">
+      <div class="s-num">01</div>
+      <div class="s-org">Arctic Council</div>
+      <div class="s-role">Primary international governance body. Geospatial intelligence products delivered to inform Arctic boundary policy and member-nation treaty obligations.</div>
+      <div class="s-badge badge-intl">International</div>
+    </div>
+    <div class="stakeholder-row">
+      <div class="s-num">02</div>
+      <div class="s-org">Inuit Tribal Government</div>
+      <div class="s-role">Indigenous rights and territorial stakeholder. Spatial deliverables directly supported Inuit sovereignty claims and infrastructure planning on traditional lands.</div>
+      <div class="s-badge badge-indigenous">Indigenous</div>
+    </div>
+    <div class="stakeholder-row">
+      <div class="s-num">03</div>
+      <div class="s-org">U.S. Government</div>
+      <div class="s-role">Federal stakeholder with national security interest in Arctic boundary determinations and infrastructure risk assessment across geopolitically sensitive terrain.</div>
+      <div class="s-badge badge-fed">Federal</div>
+    </div>
+    <div class="stakeholder-row">
+      <div class="s-num">04</div>
+      <div class="s-org">Tomkulak Consortium</div>
+      <div class="s-role">Non-profit coordinating body. Directed the 20-year initiative mandate, coordinated cross-stakeholder delivery, and managed the geospatial production team.</div>
+      <div class="s-badge badge-water">Non-Profit</div>
+    </div>
+  </div>
+</section>
+
+<!-- Technical Work -->
+<section id="technical">
+  <div class="sec-eyebrow">04 — Technical Execution</div>
+  <h2 class="sec-title">GIS Work at Scale</h2>
+  <div class="tech-timeline">
+    <div class="tech-entry">
+      <div class="tech-entry-label">Boundary Analysis</div>
+      <div class="tech-entry-title">High-Accuracy Arctic Boundary Determination</div>
+      <p class="tech-entry-body">Processed and validated 1,000+ spatial datasets and thousands of individual features using ArcGIS Pro, QGIS, and enterprise GIS platforms. All data integrity standards were aligned with national security protocols — a standard that demands zero tolerance for spatial errors in boundary determinations that feed directly into international treaty documentation.</p>
+    </div>
+    <div class="tech-entry">
+      <div class="tech-entry-label">Remote Sensing</div>
+      <div class="tech-entry-title">Satellite Imagery Interpretation Across Dynamic Terrain</div>
+      <p class="tech-entry-body">Applied advanced remote sensing methodologies to verify and enhance Arctic spatial datasets. The Arctic environment presents unique challenges for imagery analysis — seasonal ice cover, permafrost dynamics, and low sun angles all affect feature interpretation. Delivered verified spatial datasets across terrain that is both physically dynamic and geopolitically contested.</p>
+    </div>
+    <div class="tech-entry">
+      <div class="tech-entry-label">Infrastructure Siting</div>
+      <div class="tech-entry-title">CIS Placement Analysis with Geological Integration</div>
+      <p class="tech-entry-body">Collaborated directly with professional geologists to conduct spatial analysis for Critical Infrastructure Systems placement. Integrated subsurface and terrain data — including permafrost layer mapping and geological risk factors — to produce site suitability assessments for transportation networks: hospitals, ports, highways, and airports across the 8,000-mile study zone.</p>
+    </div>
+    <div class="tech-entry">
+      <div class="tech-entry-label">QA/QC</div>
+      <div class="tech-entry-title">National Security-Grade Data Integrity Frameworks</div>
+      <p class="tech-entry-body">Implemented and maintained rigorous QA/QC frameworks ensuring all geospatial intelligence products met compliance requirements for national security use. Led the production team through systematic validation protocols on every dataset processed — a non-negotiable standard when outputs feed directly into treaty-level policy decisions.</p>
+    </div>
+    <div class="tech-entry">
+      <div class="tech-entry-label">Lifecycle Planning</div>
+      <div class="tech-entry-title">Long-Term Environmental Risk Datasets</div>
+      <p class="tech-entry-body">Produced geospatial maintenance planning datasets identifying long-term environmental and geological risk factors for infrastructure systems post-construction. These datasets extend the value of the initial siting analysis across the full 20-year planning horizon, providing decision-makers with actionable spatial intelligence for infrastructure lifecycle management.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Strategy Pillars -->
+<section style="background: var(--panel);">
+  <div class="sec-eyebrow">05 — Geospatial Strategy</div>
+  <h2 class="sec-title">How the Work Was Done</h2>
+  <div class="tech-timeline">
+
+    <div class="tech-entry">
+      <div class="tech-entry-label">Data & Tooling</div>
+      <div class="tech-entry-title">Robust Tools & Comprehensive Data Acquisition</div>
+      <p class="tech-entry-body">Deployed ArcGIS Pro, ArcGIS Enterprise, and QGIS to perform comprehensive spatial analysis, integrating diverse data layers — environmental, demographic, geological, hydrological, and topographic — into a unified geospatial picture of the Arctic territory. Data acquisition was systematic, building a detailed understanding of the landscape and its dynamic environmental conditions to support evidence-based, responsible decision-making.</p>
+    </div>
+
+    <div class="tech-entry">
+      <div class="tech-entry-label">Site Evaluation</div>
+      <div class="tech-entry-title">Multi-Criteria Analysis for Infrastructure Siting</div>
+      <p class="tech-entry-body">Developed a systematic spatial evaluation framework assessing potential infrastructure sites across multiple criteria simultaneously: proximity to resources, accessibility, environmental sensitivity, community needs, geological stability, and climate risk. Advanced spatial analysis techniques were applied to score and rank candidate locations, ensuring infrastructure placement recommendations were grounded in rigorous, reproducible methodology.</p>
+    </div>
+
+    <div class="tech-entry">
+      <div class="tech-entry-label">Risk & Resilience</div>
+      <div class="tech-entry-title">Risk Assessment Integrating Climate Change Modeling</div>
+      <p class="tech-entry-body">Conducted thorough risk assessments identifying potential hazards and vulnerabilities across the project area — including permafrost degradation, extreme weather exposure, and environmental sensitivities. Climate change projections and scenario modeling were integrated to anticipate future challenges and inform adaptive strategies, ensuring infrastructure planned today will remain viable across the 20-year horizon.</p>
+    </div>
+
+    <div class="tech-entry">
+      <div class="tech-entry-label">Community & Sovereignty</div>
+      <div class="tech-entry-title">Indigenous Engagement & Stakeholder Consultation</div>
+      <p class="tech-entry-body">Fostered meaningful engagement with Indigenous communities — including the Inuit Tribal Government — local stakeholders, government agencies, and industry partners throughout the planning and decision-making process. This ensured transparency, inclusivity, and respect for Indigenous rights and Traditional Knowledge across every stage of the geospatial work. Coordinated delivery of intelligence products to the Arctic Council and U.S. Government, directly informing policy-level Arctic boundary determinations.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Skills Used -->
+<section style="padding-top: 2rem;">
+  <div class="sec-eyebrow">05 — Skills & Platforms</div>
+  <h2 class="sec-title">Technical Toolkit</h2>
+  <div class="skills-grid">
+    <div class="skill-chip">
+      <div class="skill-chip-name">ArcGIS Pro / Enterprise</div>
+      <div class="skill-chip-desc">Primary platform for spatial dataset processing, validation, boundary analysis, and cartographic output</div>
+    </div>
+    <div class="skill-chip">
+      <div class="skill-chip-name">QGIS</div>
+      <div class="skill-chip-desc">Supplementary geospatial analysis and cross-platform data validation workflows</div>
+    </div>
+    <div class="skill-chip">
+      <div class="skill-chip-name">Python / ArcPy</div>
+      <div class="skill-chip-desc">Automation of repetitive spatial processing tasks and custom geoprocessing workflows across 1,000+ datasets</div>
+    </div>
+    <div class="skill-chip">
+      <div class="skill-chip-name">Remote Sensing</div>
+      <div class="skill-chip-desc">Satellite imagery interpretation and enhancement of Arctic spatial datasets across dynamic terrain</div>
+    </div>
+    <div class="skill-chip">
+      <div class="skill-chip-name">Spatial Modeling</div>
+      <div class="skill-chip-desc">Site suitability modeling integrating terrain, subsurface geology, and environmental risk data for CIS placement</div>
+    </div>
+    <div class="skill-chip">
+      <div class="skill-chip-name">QA/QC Frameworks</div>
+      <div class="skill-chip-desc">National security-compliant data integrity protocols, test case development, and validation workflows</div>
+    </div>
+  </div>
+</section>
+
+<!-- Impact Banner -->
+<div class="impact-banner">
+  <div class="impact-inner">
+    <div class="impact-left">
+      <div class="big-stat">8,000</div>
+      <div class="big-stat-label">Miles of Arctic territory — one initiative</div>
+    </div>
+    <div class="impact-right">
+      Geospatial intelligence products delivered to the Arctic Council, Inuit Tribal Government, and U.S. Government — directly informing policy-level Arctic boundary determinations with national security implications that will shape the region for the next two decades.
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div>
+    <div class="cta-title">Interested in this work?</div>
+    <div class="cta-sub">GIS Engineer & Geospatial Scientist · Portland, Oregon · Open to new roles</div>
+  </div>
+  <div class="cta-buttons">
+    <a href="https://linkedin.com/in/matthew-price-83035291" target="_blank" class="btn btn-ice">View LinkedIn</a>
+    <a href="/cdn-cgi/l/email-protection#89c4a7dba7d9fbe0eaecbfbcb9c9eee4e8e0e5a7eae6e4" class="btn btn-ghost">Get in Touch</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-text">Matthew Price — GIS Engineer & Geospatial Scientist — Portland, Oregon</div>
+  <div class="footer-text"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="44096a166a14362d2721727174042329252d286a272b29">[email&#160;protected]</a> · (650) 922-0513</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Generate star field
+  const starfield = document.getElementById('starfield');
+  for (let i = 0; i < 120; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 1.8 + 0.4;
+    star.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      top: ${Math.random() * 100}%;
+  
