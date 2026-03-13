@@ -4,6 +4,7 @@ summary: "Field School for Archaeology that focuses on the educaion of Archeaolo
 category: Remote Sensing, Archaeology, GIS Mapping, 3D Research, Drone Photography, Photogrammetry
 thumb_class: remote
 thumb_image: /belize-1.jpg
+live_url: /mayan-3d-portfolio.html
 tools: [Google Earth Engine, Python, Strata Foto, ArcGIS, Drones, HD Digital Photography]
 year: 2014
 role: Student of Field School , Creator of 3D Research 
