@@ -7,7 +7,7 @@ thumb_class: remote
 tools: [Google Earth Engine, Python, Strata Foto, ArcGIS, Drones, HD Digital Photography]
 year: 2014
 role: Student of Field School , Creator of 3D Research 
-dataset: ESA Sentinel-2 MSI Level-2A
+dataset: Drone aerial imagery, 3D surrogate models / DEM files, Total Station spatial coordinate data, Lithic assemblage records, Archaeological field recording data
 order: 2
 github_url: https://github.com/MPrice650/field-school
 ---
