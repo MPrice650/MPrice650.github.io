@@ -3,6 +3,10 @@ title: "Belize Archaeological Field School — Excavation, Survey & 3D Reconstru
 summary: "Field School for Archaeology that focuses on the educaion of Archeaology and methodoologies while conducting the excavation of Dos Hombres in Belize.  "
 category: Remote Sensing, Archaeology, GIS Mapping, 3D Research, Drone Photography, Photogrammetry
 thumb_class: remote
+<video autoplay muted loop playsinline 
+  style="width:100%; border: 2px solid var(--ink);">
+  <source src="/assets/mayan-render.mp4" type="video/mp4">
+</video>
 tools: [Google Earth Engine, Python, Strata Foto, ArcGIS, Drones, HD Digital Photography]
 year: 2014
 role: Student of Field School , Creator of 3D Research 
