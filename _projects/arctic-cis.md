@@ -6,6 +6,6 @@ thumb_class: analysis
 tools: [ArcGIS Pro, QGIS, Python, Remote Sensing]
 year: 2024
 role: GIS Engineer & Geospatial Scientist
-order: 1
+order: 5
 live_url: /arctic-cis-portfolio.html
 ---
