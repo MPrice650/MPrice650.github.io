@@ -87,7 +87,7 @@ title: Portfolio
               <span class="tool-badge">{{ tool }}</span>
             {% endfor %}
           </div>
-          <a href="{{ project.url | relative_url }}" class="project-card__link">
+          <a href="{% if project.live_url %}{{ project.live_url }}{% else %}{{ project.url | relative_url }}{% endif %}" class="project-card__link">
             View →
           </a>
         </div>
