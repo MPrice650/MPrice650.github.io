@@ -1,6 +1,5 @@
 ---
-title: "Field School — Programme for Belize Archaeology Project (PfBAP)
-Orange Walk, Belize · May – June 2014"
+title: "Belize Archaeological Field School — Excavation, Survey & 3D Reconstruction"
 summary: "Field School for Archaeology that focuses on the educaion of Archeaology and methodoologies while conducting the excavation of Dos Hombres in Belize.  "
 category: Remote Sensing, Archaeology, GIS Mapping, 3D Research, Drone Photography, Photogrammetry
 thumb_class: remote
