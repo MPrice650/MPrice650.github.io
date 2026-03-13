@@ -1,14 +1,13 @@
 ---
-title: "EV Charging Equity Analysis"
-summary: "Geostatistical analysis identifying underserved communities in the Pacific Northwest's EV charging infrastructure rollout using accessibility modeling."
-category: Spatial Analysis
+title: "Arctic CIS Mapping Initiative"
+summary: "Geospatial intelligence products delivered across 8,000 miles of Arctic territory — informing boundary policy for the Arctic Council, Inuit Tribal Government, and U.S. Government."
+category: Spatial Analysis, Remote Sensing, Boundary Mapping
 thumb_class: analysis
-tools: [Python, GeoPandas, OSRM, R, PostgreSQL]
-year: 2023
-role: Spatial Data Scientist
-dataset: DOE AFDC, ACS 2022, OpenStreetMap
-order: 3
-github_url: https://github.com/yourgithub/ev-equity
+tools: [ArcGIS Pro, QGIS, Python, Remote Sensing]
+year: 2024
+role: GIS Engineer & Geospatial Scientist
+order: 1
+live_url: /arctic-cis-portfolio.html
 ---
 
 ## Overview
