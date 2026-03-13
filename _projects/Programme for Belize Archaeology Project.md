@@ -14,19 +14,15 @@ github_url: https://github.com/MPrice650/field-school
 
 ## Overview
 
-Participated in active excavation of a Mayan settlement site, conducting lithic analysis of chert and obsidian artifacts alongside 21 hours of weekly lab work. Led drone photography and 3D surrogate modeling of excavation features — including water structures — with minimal supervision, combining aerial imagery with spatial data to produce detailed 3D site reconstructions in Belize, Orange Walk.
+This project combines active archaeological fieldwork and advanced digital documentation at a Mayan settlement site in Belize, Orange Walk. Using drone photogrammetry, 3D surrogate modeling, and GIS-compatible outputs, the work produced detailed digital reconstructions of excavation features — including water structures — while also contributing to artifact analysis and site surveying. The broader goal is to provide museums, researchers, and teaching collections with accurate, low-cost digital surrogates that reduce reliance on physical artifact transportation.
 
 ## Methodology
 
-Field & Excavation
-Archaeological excavation of Mayan settlement sites, applying standard field recording and stratigraphic methods.
-Survey & Instrumentation
-Operated and instructed use of Total Station equipment for precision ground survey, recording spatial coordinates of excavation features and site boundaries.
-Spatial & Remote Sensing
-Drone photogrammetry and 3D surrogate modeling of excavation features, producing georeferenced reconstructions of water structures and site layouts.
-Artifact Analysis
-Lithic analysis of chert and obsidian assemblages, including classification and lab-based examination.
+High-definition 3D reconstructions of Mayan settlement features — including water structures and structural layouts — were successfully produced from drone and close-range photography with minimal equipment. The photogrammetry workflow proved effective across varied artifact types and site-scale features, generating navigable 3D PDF models and GIS-ready DEMs without risk to artifact condition or site integrity.
 
 ## Results
 
-Successfully completed the full field school curriculum, gaining certified hands-on training across excavation, survey, and lab analysis disciplines. Delivered complete 3D rendered reconstructions of Mayan settlements — including water features and structural layouts — produced from drone photography and photogrammetric modeling, providing the project with a comprehensive digital record of the site.
+Complete 3D rendered reconstructions of Mayan settlement features, including water structures and site layouts
+DEM and georeferenced model files compatible with ArcMap/ArcScene
+Lithic analysis records of chert and obsidian assemblages
+A certified, replicable field-to-lab workflow spanning excavation, survey, remote sensing, and artifact documentation
