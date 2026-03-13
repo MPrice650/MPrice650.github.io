@@ -83,7 +83,7 @@ title: Portfolio
         <p class="project-card__desc">{{ project.summary }}</p>
         <div class="project-card__footer">
           <div class="project-card__tools">
-            {% for tool in project.tools limit:3 %}
+            {% for tool in project.tools limit:6 %}
               <span class="tool-badge">{{ tool }}</span>
             {% endfor %}
           </div>
