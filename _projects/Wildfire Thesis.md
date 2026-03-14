@@ -3,14 +3,13 @@ title: "Wildfire Probability Analysis "
 summary: "Interactive web application visualizing surface temperature differentials across metropolitan areas using Landsat 8 thermal data."
 category: Web Mapping
 thumb_class: webmap
-live_url: /wildfire-portfolio.html
 tools: [Mapbox GL JS, Python, PostGIS, Landsat 8]
 year: 2024
 role: Solo Developer & Analyst
 dataset: USGS Landsat Collection 2
 order: 1
 github_url: https://github.com/yourgithub/urban-heat-island
-live_url: "#"
+live_url: /wildfire-portfolio.html
 ---
 
 ## Overview
