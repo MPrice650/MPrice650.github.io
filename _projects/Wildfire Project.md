@@ -1,5 +1,5 @@
 ---
-title: "Urban Heat Island Dashboard"
+title: "Wildfire Probability Analysis "
 summary: "Interactive web application visualizing surface temperature differentials across metropolitan areas using Landsat 8 thermal data."
 category: Web Mapping
 thumb_class: webmap
