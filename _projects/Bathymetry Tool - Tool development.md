@@ -3,6 +3,7 @@ title: "Bathymetry Tool - Tool development"
 summary: "A 48-page print atlas documenting watershed boundaries, flow accumulation, and land cover for the Pacific Coast hydrological region."
 category: Cartography
 thumb_class: carto
+thumb_image: /assets/images/BathymertyMap/Bathymetric_Map.jpg
 tools: [ArcGIS Pro, Adobe Illustrator, QGIS, Natural Earth]
 year: 2023
 role: Cartographer
