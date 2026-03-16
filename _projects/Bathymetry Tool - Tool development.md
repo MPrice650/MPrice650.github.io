@@ -1,6 +1,6 @@
 ---
 title: "Web/Desktop App Development - Bathymetry Tool"
-summary: "A 48-page print atlas documenting watershed boundaries, flow accumulation, and land cover for the Pacific Coast hydrological region."
+summary: "A standalone Python application automating lake depth analysis via ArcPy. Features a custom PyQt5 GUI for loading depth shapefiles, selecting interpolation methods, and executing the full pipeline — outputting contour maps, raster surfaces, volume calculations, and a 3D ArcScene visualization. Deployable in office or field environments, and packageable as a custom ArcGIS Pro toolbox."
 category: Cartography
 thumb_class: carto
 thumb_image: /assets/images/BathymertyMap/Bathymetric_Map.jpg
