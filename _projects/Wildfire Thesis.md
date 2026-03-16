@@ -1,6 +1,6 @@
 ---
 title: "Wildfire Probability Analysis "
-summary: "MA capstone research examining the environmental drivers of wildfire occurrence in Marin County, California. Combined multi-layer Boolean raster analysis across seven environmental variables — precipitation, temperature, soil moisture, drought index, elevation, wind, and land cover — with WUI modeling and linear regression in GeoDa to produce thematic wildfire probability maps. Validated outputs against 222 MODIS thermal anomaly points and a century of FRAP historical fire boundaries, while assessing the accuracy of FEMA's National Risk Index against actual fire geography."
+summary: "MA Thesis research mapping wildfire probability across Marin County, California. Built a multi-layer Boolean raster analysis in ArcGIS Pro across seven environmental variables, refined with WUI modeling, and validated against 222 MODIS thermal anomaly points and a century of historical fire boundaries. Linear regression in GeoDa identified soil moisture and land cover as the strongest predictors of fire occurrence, while exposing limitations in FEMA's National Risk Index as a spatial risk model."
 category: Remote Sensing
 thumb_class: Remote Sensing
 thumb_image: /assets/images/wildfire-maps/WildFire Risk Map.jpg
