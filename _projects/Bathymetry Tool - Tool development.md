@@ -1,7 +1,7 @@
 ---
 title: "Web/Desktop App Development - Bathymetry Tool"
 summary: "A standalone Python application automating lake depth analysis via ArcPy. Features a custom PyQt5 GUI for loading depth shapefiles, selecting interpolation methods, and executing the full pipeline — outputting contour maps, raster surfaces, volume calculations, and a 3D ArcScene visualization. Deployable in office or field environments, and packageable as a custom ArcGIS Pro toolbox."
-category: Cartography
+category: Python Development, GIS Automation, Spatial Analysis, GUI Design, ArcGIS Pro, 3D Visualization
 thumb_class: carto
 thumb_image: /assets/images/BathymertyMap/Bathymetric_Map.jpg
 tools: [ArcGIS Pro, Python 3, ArcPy, Qt Designer, Remote Sensing, Spyder IDE]
