@@ -1,7 +1,7 @@
 ---
 title: "Wildfire Probability Analysis "
 summary: "MA Thesis research mapping wildfire probability across Marin County, California. Built a multi-layer Boolean raster analysis in ArcGIS Pro across seven environmental variables, refined with WUI modeling, and validated against 222 MODIS thermal anomaly points and a century of historical fire boundaries. Linear regression in GeoDa identified soil moisture and land cover as the strongest predictors of fire occurrence, while exposing limitations in FEMA's National Risk Index as a spatial risk model."
-category: Remote Sensing
+category: Remote Sensing, Spatial Analysis, Cartography
 thumb_class: Remote Sensing
 thumb_image: /assets/images/wildfire-maps/WildFire Risk Map.jpg
 tools: [ArcGIS Pro, GeoDa, Python, MODIS, Cal Fire, FEMA]
