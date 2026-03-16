@@ -1,5 +1,5 @@
 ---
-title: "Bathymetry Tool - Tool development"
+title: "Web/Desktop App Development - Bathymetry Tool"
 summary: "A 48-page print atlas documenting watershed boundaries, flow accumulation, and land cover for the Pacific Coast hydrological region."
 category: Cartography
 thumb_class: carto
