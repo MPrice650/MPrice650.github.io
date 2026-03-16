@@ -4,7 +4,7 @@ summary: "A 48-page print atlas documenting watershed boundaries, flow accumulat
 category: Cartography
 thumb_class: carto
 thumb_image: /assets/images/BathymertyMap/Bathymetric_Map.jpg
-tools: [ArcGIS Pro, Adobe Illustrator, QGIS, Natural Earth]
+tools: [ArcGIS Pro, Python 3, ArcPy, Qt Designer, Remote Sensing, Spyder IDE]
 year: 2023
 role: Cartographer
 dataset: NHD Plus v2, NLCD 2021, DEM 1/3 arc-second
