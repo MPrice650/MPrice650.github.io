@@ -1,6 +1,6 @@
 ---
 title: "Wildfire Probability Analysis "
-summary: "Interactive web application visualizing surface temperature differentials across metropolitan areas using Landsat 8 thermal data."
+summary: "MA capstone research examining the environmental drivers of wildfire occurrence in Marin County, California. Combined multi-layer Boolean raster analysis across seven environmental variables — precipitation, temperature, soil moisture, drought index, elevation, wind, and land cover — with WUI modeling and linear regression in GeoDa to produce thematic wildfire probability maps. Validated outputs against 222 MODIS thermal anomaly points and a century of FRAP historical fire boundaries, while assessing the accuracy of FEMA's National Risk Index against actual fire geography."
 category: Remote Sensing
 thumb_class: Remote Sensing
 thumb_image: /assets/images/wildfire-maps/WildFire Risk Map.jpg
