@@ -3,6 +3,7 @@ title: "Wildfire Probability Analysis "
 summary: "Interactive web application visualizing surface temperature differentials across metropolitan areas using Landsat 8 thermal data."
 category: Web Mapping
 thumb_class: webmap
+thumb_image: /assets/images/wildfire-maps/WildFire Risk Map.jpg
 tools: [ArcGIS Pro, GeoDa, Python, MODIS, Cal Fire, FEMA]
 year: 2024
 role: Solo Developer & Analyst
